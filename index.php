@@ -47,12 +47,12 @@ function _get($str){
 
 function checkArgs($name, $passwd){
     if(preg_match("/\W/", $name) || preg_match("/\s/", $name)){
-       echo "<h3 >检测到恶意代码</h3 >"."<br>";
+       echo "<h3>用户名中检测到恶意代码</h3 >"."<br>";
         return false;
     }
     $num = preg_match_all("/</", $passwd) + preg_match_all("/>/", $passwd);
     if (preg_match_all("/<script>/i", $passwd) || $num > 2){
-        echo "<h3>检测到恶意代码</h3><br>";
+        echo "<h3>密码中检测到恶意代码</h3><br>";
         return false;
     }
     return true;
@@ -62,18 +62,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     $name = _get("username");
     $pass = _get("password");
 
-    $pass = htmlspecialchars($pass);
+//    $pass = htmlspecialchars($pass);
 
     if (checkArgs($name, $pass)){
         if ($name == "junay" && $pass == "junay"){
             setcookie("user","Junay",time()+3600); //设置COOKIE
-            echo "<script> alert(登陆成功！)</script>";
+            echo "<script> alert('登陆成功！')</script>";
             header("Location: http://202.192.32.64/WebSecurity/main.php"); //页面自动跳转
             exit;
         }
        else {
-           echo "<script>alert(用户名或密码不正确！)</script>";
+           echo "<script>alert('用户名或密码不正确！')</script>";
         }
+    }
+    else {
+        echo "<script type=\"text/javascript\">";
+        echo "alert('请检查账号密码！')";
+        echo "</script>";
     }
 }
 
