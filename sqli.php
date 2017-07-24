@@ -1,0 +1,102 @@
+<html>
+<?php
+//include 'head.php';
+?>
+
+<head>
+    <title>SQL注入</title>
+    <center>
+        <h1><b>SQL注入演练</b></h1>
+    </center>
+</head>
+<body>
+<script>
+    function submitform(){
+
+        var form11 = document.getElementById("selects").value;
+        var form22 = document.getElementById("id").value;
+
+        var arr = new Array();
+        arr.push(form11);
+        arr.push(form22);
+        return arr;
+    }
+</script>
+<script>
+    function getlevel(){
+        var obj = document.getElementById('selects');
+        //alert(obj.value);
+        return obj.value;
+    }
+</script>
+
+<center>
+
+<form id="form2" method="get" action="sqli.php">
+    <table border="2">
+        <tr>
+            <td>ID：<input type="text" name="id" id="id"></td>
+        </tr>
+    </table>
+<!--    <input type="button" value="提交" onclick="submitform()">-->
+    <input type="submit">
+</form>
+</center>
+
+
+
+<?php
+//    $level = "<script>document.write(getlevel())</script>";
+//    $level = $_COOKIE['cookie']['level'];
+    $level = 'mid';
+    $id = isset($_GET['id'])?$_GET['id']:null;
+//    echo $level."<br>";
+//    echo $id."<br>";
+
+
+    //低级别
+    if ($level == "low"){
+        query($id);
+    }
+    elseif ($level == 'mid'){
+        if (strpos($id,'select') || stripos($id,'and')){
+            echo "<script>alert('检测到恶意代码')</script>";
+            die();
+        }
+
+        query($id);
+    }
+    elseif ($level == 'high'){
+        if (preg_match_all('/\W/',$id)){
+            echo "<script>alert('检测到恶意代码')</script>";
+            die();
+        }
+        query($id);
+    }
+    else {
+        echo "<h2>请检查参数</h2><br>";
+    }
+
+function query($id){
+    //连接数据库
+    $con = new mysqli("202.192.32.64","jj","jj123456","my_db");
+    if ($con->connect_errno){
+        echo "<h2>连接数据库失败！</h2><br>";
+        die();
+    }
+    $sql = "select ID, sex, age, email from admin WHERE ID=$id";
+    echo "<h3>正在查询：".$sql."</h3><br>";
+    $result = $con->query($sql);
+    while (@$row = $result->fetch_assoc()) {
+        echo "<h3>ID：" . $row["ID"] . "</h3><br>";
+        echo "<h3>性别：" . $row["sex"] . "</h3><br>";
+        echo "<h3>年龄：" . $row["age"] . "</h3><br>";
+        echo "<h3>Email：" . $row["email"] . "</h3><br>";
+    }
+    $con->close();
+}
+?>
+
+
+</body>
+</html>

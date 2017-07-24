@@ -1,29 +1,8 @@
+<html>
 <?php
-if (isset($_COOKIE["user"])){
-    if ($_COOKIE["user"] != "Junay"){
-        echo "<p>";
-        echo "<h2>你无权访问当前页面！</h2><br>";
-        echo "<h3><a href='index.php'>请登录</a></h3><br>";
-        header("Location: http://202.192.32.64/WebSecurity/main.php"); //页面自动跳转
-	echo "</p>";
-        die("正在退出");
-    }
-    else {
-        date_default_timezone_set("Asia/Shanghai");
-        echo "<h3>现在是：".date("h:i:sa")."<br></h3>";
-        echo "<h2><b>欢迎你，".$_COOKIE["user"]."</b></h2><br>";
-    }
-}
-else {
-    echo "<p>";
-    echo "<h2 style=\"background-color: deepskyblue\">无权访问当前页面！</h2><br>";
-    echo "<h3><a href='index.php'>请登录</a></h3><br>";
-    echo "</p>";
-    die();
-}
+include 'head.php';
 ?>
 
-<html>
 <head>
     <title>主界面</title>
     <center>
@@ -33,10 +12,41 @@ else {
 <body>
     <center>
         <h3>
+            <form name="level_form" method="post" action="main.php">
+                级别：
+                <select name="level">
+                    <option value="low">低</option>
+                    <option value="mid">中</option>
+                    <option value="high">高</option>
+                </select>
+                <input type="submit" value="提交">
+            </form>
         <ul>
-        <li><a name="a1" onmouseover="changeOver(this)" onmouseout="changeOut(this)" href="sqli.php">SQL注入</a><br></li>
-        <li><a name="a2" onmouseover="changeOver(this)" onmouseout="changeOut(this)" href="xss.php">XSS+CSRF</a><br></li>
-        <li><a name="a3" onmouseover="changeOver(this)" onmouseout="changeOut(this)" href="fileupload.php">文件上传</a><br></li>
+            <?php
+            function _get($str){
+                $val = isset($_POST[$str])?$_POST[$str]:null;
+                return $val;
+            }
+
+            $level = _get('level');
+            if (preg_match_all("/\W/",$level) > 0){
+                echo "<h2>匹配到非法字符</h2><br>";
+                echo "<script>alert('匹配到非法字符')</script>";
+                die();
+            }
+            setcookie("cookie[level]",$level);
+
+            //echo $level;
+            $sqli = "sqli.php";
+            $xss = "xss.php";
+            $upload = "fileupload.php";
+
+            echo "<li><a name=\"a1\" onmouseover=\"changeOver(this)\" onmouseout=\"changeOut(this)\" href=$sqli>SQL注入</a><br></li>";
+            echo "<li><a name=\"a2\" onmouseover=\"changeOver(this)\" onmouseout=\"changeOut(this)\" href=$xss>XSS+CSRF</a><br></li>";
+            echo "<li><a name=\"a3\" onmouseover=\"changeOver(this)\" onmouseout=\"changeOut(this)\" href=$upload>文件上传</a><br></li>";
+
+            ?>
+
         </ul>
         </h3>
     </center>

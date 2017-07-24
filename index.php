@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>主界面</title>
+    <title>登陆</title>
     <form name="forms" method="post" action="index.php" onSubmit="return checkform(this)" >
         <center>
         <h1 style="background-color: bisque"><b>登陆</b></h1><br>
@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
     if (checkArgs($name, $pass)){
         if ($name == "junay" && $pass == "junay"){
-            setcookie("user","Junay",time()+3600); //设置COOKIE
+            setcookie("cookie[user]","Junay",time()+3600); //设置COOKIE
             echo "<script> alert('登陆成功！')</script>";
             header("Location: http://202.192.32.64/WebSecurity/main.php"); //页面自动跳转
             exit;
