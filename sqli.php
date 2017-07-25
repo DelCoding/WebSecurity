@@ -1,6 +1,6 @@
 <html>
 <?php
-//include 'head.php';
+include 'head.php';
 ?>
 
 <head>
@@ -47,19 +47,20 @@
 
 <?php
 //    $level = "<script>document.write(getlevel())</script>";
-//    $level = $_COOKIE['cookie']['level'];
-    $level = 'mid';
+    $level = $_COOKIE['cookie']['level'];
     $id = isset($_GET['id'])?$_GET['id']:null;
 //    echo $level."<br>";
 //    echo $id."<br>";
 
 
     //低级别
-    if ($level == "low"){
+    if ($level == 'low'){
+        echo "<h3>当前级别为：".$level."</h3><br>";
         query($id);
     }
     elseif ($level == 'mid'){
-        if (strpos($id,'select') || stripos($id,'and')){
+        echo "<h3>当前级别为：".$level."</h3><br>";
+        if (strpos($id,'select') || strpos($id,'and')){
             echo "<script>alert('检测到恶意代码')</script>";
             die();
         }
@@ -67,6 +68,7 @@
         query($id);
     }
     elseif ($level == 'high'){
+        echo "<h3>当前级别为：".$level."</h3><br>";
         if (preg_match_all('/\W/',$id)){
             echo "<script>alert('检测到恶意代码')</script>";
             die();
@@ -87,6 +89,7 @@ function query($id){
     $sql = "select ID, sex, age, email from admin WHERE ID=$id";
     echo "<h3>正在查询：".$sql."</h3><br>";
     $result = $con->query($sql);
+    echo "<br><h3>".$con->error."</h3><br>";
     while (@$row = $result->fetch_assoc()) {
         echo "<h3>ID：" . $row["ID"] . "</h3><br>";
         echo "<h3>性别：" . $row["sex"] . "</h3><br>";
