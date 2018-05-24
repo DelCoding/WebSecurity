@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         if ($name == "junay" && $pass == "junay"){
             setcookie("cookie[user]","Junay",time()+3600); //设置COOKIE
             echo "<script> alert('登陆成功！')</script>";
-            header("Location: http://192.168.40.132/WebSecurity/main.php"); //页面自动跳转
+            header("Location: main.php"); //页面自动跳转
             exit;
         }
        else {
