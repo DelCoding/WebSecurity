@@ -81,12 +81,12 @@ include 'head.php';
 
 function query($id){
     //连接数据库
-    $con = new mysqli("202.192.32.64","jj","jj123456","my_db");
+    $con = new mysqli("127.0.0.1","root","","my_db");
     if ($con->connect_errno){
         echo "<h2>连接数据库失败！</h2><br>";
         die();
     }
-    $sql = "select ID, sex, age, email from admin WHERE ID=$id";
+    $sql = "select ID, sex, age, email from Persons WHERE ID=$id";
     echo "<h3>正在查询：".$sql."</h3><br>";
     $result = $con->query($sql);
     echo "<br><h3>".$con->error."</h3><br>";

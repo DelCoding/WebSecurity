@@ -30,7 +30,7 @@ include 'head.php'
     $msg = isset($_POST['message'])?$_POST['message']:null;
     $level = $_COOKIE['cookie']['level'];
     echo "<br><p><h3>当前级别：".$level.'</h3></p><br>';
-    $con = new mysqli("202.192.32.64","jj","jj123456","xss_msg");
+    $con = new mysqli("127.0.0.1","root","","xss_msg");
     if ($level == 'low' && $name != null){
         $name = stripslashes($name);
         $msg = stripslashes($msg);
